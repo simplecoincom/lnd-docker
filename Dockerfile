@@ -18,7 +18,7 @@ RUN go get -d github.com/lightningnetwork/lnd
 
 RUN cd /go/src/github.com/lightningnetwork/lnd \
 &&  make \
-&&  make install tags="signrpc walletrpc chainrpc invoicesrpc"
+&&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd" 
 
 # Start a new, final image to reduce size.
 FROM alpine as final
