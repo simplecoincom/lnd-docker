@@ -1,5 +1,5 @@
  
-FROM golang:1.13-alpine as builder
+FROM golang:1.15.6-alpine as builder
 
 LABEL maintainer="SimpleCoin <devops@simplecoin.com>"
 
@@ -7,15 +7,16 @@ LABEL maintainer="SimpleCoin <devops@simplecoin.com>"
 # queries required to connect to linked containers succeed.
 ENV GODEBUG netdns=cgo
 
-# Install dependencies and install/build lnd.
+ARG checkout="master"
+
+# Install dependencies and build the binaries.
 RUN apk add --no-cache --update alpine-sdk \
     git \
-    make 
-
-# Fetch lnd go lib
-RUN go get -d github.com/lightningnetwork/lnd 
-
-RUN cd /go/src/github.com/lightningnetwork/lnd \
+    make \
+    gcc \
+&&  git clone https://github.com/lightningnetwork/lnd /go/src/github.com/lightningnetwork/lnd \
+&&  cd /go/src/github.com/lightningnetwork/lnd \
+&&  git checkout $checkout \
 &&  make \
 &&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd" 
 
