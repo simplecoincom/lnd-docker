@@ -7,7 +7,7 @@ LABEL maintainer="SimpleCoin <devops@simplecoin.com>"
 # queries required to connect to linked containers succeed.
 ENV GODEBUG netdns=cgo
 
-ARG checkout="master"
+ARG CHECKOUT="master"
 
 # Install dependencies and build the binaries.
 RUN apk add --no-cache --update alpine-sdk \
@@ -16,7 +16,7 @@ RUN apk add --no-cache --update alpine-sdk \
     gcc \
 &&  git clone https://github.com/lightningnetwork/lnd /go/src/github.com/lightningnetwork/lnd \
 &&  cd /go/src/github.com/lightningnetwork/lnd \
-&&  git checkout $checkout \
+&&  git checkout ${CHECKOUT} \
 &&  make \
 &&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd" 
 
