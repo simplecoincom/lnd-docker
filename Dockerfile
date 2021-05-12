@@ -34,6 +34,6 @@ COPY --from=builder /go/bin/lnd /bin/
 
 # Add bash.
 RUN apk add --no-cache \
-    bash
+    curl
 
 ENTRYPOINT ["lnd"]
