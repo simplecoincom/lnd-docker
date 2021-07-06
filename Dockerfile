@@ -1,5 +1,5 @@
  
-FROM golang:1.15.6-alpine as builder
+FROM golang:1.16.5-alpine as builder
 
 LABEL maintainer="SimpleCoin <devops@simplecoin.com>"
 

@@ -1,14 +1,14 @@
 version: 2.1
 orbs:
   docker: circleci/docker@1.6.0
-  simplecoin-utils: simplecoin-orbs/simplecoin-utils@1
   anchore: anchore/anchore-engine@1.8.7
 
 workflows:
-  build_and_test_deploy:
+  build_and_publish:
     jobs:
       - docker/publish:
           context: dockerhub
+          lint-dockerfile: true
           image: simplecoin/channel-preload-service
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
@@ -19,12 +19,9 @@ workflows:
           filters:
             branches:
               only: master
-      - simplecoin-utils/semantic-release:
-          context: github
-          requires:
-            - anchore/image_scan
+
           
-  tag_and_release:
+  _publish:
     jobs:
       - docker/publish:
           context: dockerhub
