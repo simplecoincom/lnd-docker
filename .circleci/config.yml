@@ -16,12 +16,8 @@ workflows:
           image_name: docker.io/anchore/anchore-engine:latest
           timeout: '300'
           policy_bundle_file_path: .circleci/.anchore/policy_bundle.json
-          filters:
-            branches:
-              only: master
-
           
-  _publish:
+  tag_and_release:
     jobs:
       - docker/publish:
           context: dockerhub
