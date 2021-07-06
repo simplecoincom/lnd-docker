@@ -9,7 +9,7 @@ workflows:
       - docker/publish:
           context: dockerhub
           lint-dockerfile: true
-          image: simplecoin/channel-preload-service
+          image: simplecoin/lnd-docker
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
       - anchore/image_scan:
@@ -21,7 +21,7 @@ workflows:
     jobs:
       - docker/publish:
           context: dockerhub
-          image: simplecoin/channel-preload-service
+          image: simplecoin/lnd-docker
           tag: $CIRCLE_TAG,"latest"
           extra_build_args: '--build-arg CHECKOUT=$CIRCLE_TAG'
           docker-username: DOCKER_USER
