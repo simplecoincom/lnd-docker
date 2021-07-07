@@ -1,2 +1,0 @@
-#!/bin/sh
-docker build --build-arg CHECKOUT=$DOCKER_TAG -f $DOCKERFILE_PATH -t $IMAGE_NAME .

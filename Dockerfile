@@ -1,4 +1,3 @@
- 
 FROM golang:1.15.6-alpine as builder
 
 LABEL maintainer="SimpleCoin <devops@simplecoin.com>"
@@ -18,7 +17,7 @@ RUN apk add --no-cache --update alpine-sdk \
 &&  cd /go/src/github.com/lightningnetwork/lnd \
 &&  git checkout ${CHECKOUT} \
 &&  make \
-&&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd" 
+&&  make install tags="signrpc walletrpc chainrpc invoicesrpc kvdb_etcd"
 
 # Start a new, final image to reduce size.
 FROM alpine as final
