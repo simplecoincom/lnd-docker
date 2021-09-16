@@ -1,29 +1,44 @@
+---
 version: 2.1
 orbs:
   docker: circleci/docker@1.6.0
+  simplecoin-utils: simplecoin-orbs/simplecoin-utils@1
   anchore: anchore/anchore-engine@1.8.7
 
 workflows:
-  build_and_publish:
+  build_and_test_deploy:
     jobs:
       - docker/publish:
-          context: dockerhub
-          lint-dockerfile: true
+          context: 
+            - dockerhub
+            - slack-secrets
           image: simplecoin/lnd-docker
+          extra_build_args: '--build-arg CHECKOUT=v0.13.1-beta'
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
       - anchore/image_scan:
           image_name: docker.io/anchore/anchore-engine:latest
           timeout: '300'
           policy_bundle_file_path: .circleci/.anchore/policy_bundle.json
+          filters:
+            branches:
+              only: master
+      - simplecoin-utils/semantic-release:
+          context: 
+            - github
+            - slack-secrets
+          requires:
+            - anchore/image_scan
           
   tag_and_release:
     jobs:
       - docker/publish:
-          context: dockerhub
+          context: 
+            - dockerhub
+            - slack-secrets
           image: simplecoin/lnd-docker
+          extra_build_args: '--build-arg CHECKOUT=v0.13.1-beta'
           tag: $CIRCLE_TAG,"latest"
-          extra_build_args: '--build-arg CHECKOUT=$CIRCLE_TAG'
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
           filters:
@@ -32,4 +47,4 @@ workflows:
               ignore: /.*/
             # only act on version tags
             tags:
-              only: /.*/
+              only: /^v[0-9]+(\.[0-9]+)*$/
