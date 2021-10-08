@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@1.6.0
-  anchore: anchore/anchore-engine@1.8.7
+  docker: circleci/docker@1
+  anchore: anchore/anchore-engine@1
 
 workflows:
   build_and_publish:
