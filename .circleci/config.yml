@@ -1,12 +1,13 @@
 version: 2.1
 orbs:
   docker: circleci/docker@1
-  anchore: anchore/anchore-engine@1
+  anchore: anchore/anchore-engine@1.8.7
 
 workflows:
   build_and_publish:
     jobs:
       - docker/publish:
+          parallelism: 4
           context: dockerhub
           lint-dockerfile: true
           image: simplecoin/lnd-docker
@@ -14,6 +15,7 @@ workflows:
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
       - anchore/image_scan:
+          parallelism: 4
           image_name: docker.io/anchore/anchore-engine:latest
           timeout: '300'
           policy_bundle_file_path: .circleci/.anchore/policy_bundle.json
@@ -21,6 +23,7 @@ workflows:
   tag_and_release:
     jobs:
       - docker/publish:
+          parallelism: 4
           context: dockerhub
           image: simplecoin/lnd-docker
           tag: $CIRCLE_TAG,"latest"
