@@ -10,6 +10,7 @@ workflows:
           context: dockerhub
           lint-dockerfile: true
           image: simplecoin/lnd-docker
+          tag: "postgres"
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
       - anchore/image_scan:
