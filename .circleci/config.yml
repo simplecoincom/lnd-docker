@@ -7,7 +7,6 @@ workflows:
   build_and_publish:
     jobs:
       - docker/publish:
-          parallelism: 4
           context: dockerhub
           lint-dockerfile: true
           image: simplecoin/lnd-docker
@@ -23,7 +22,6 @@ workflows:
   tag_and_release:
     jobs:
       - docker/publish:
-          parallelism: 4
           context: dockerhub
           image: simplecoin/lnd-docker
           tag: $CIRCLE_TAG,"latest"
